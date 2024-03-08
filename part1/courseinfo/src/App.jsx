@@ -1,5 +1,14 @@
+const Header =(props) => {
+  console.log(props)
+  return(
+    <div>
+      <h1>
+        {props.name}
+      </h1>
+    </div>
+)
+}
 
-import Header from "./header";
 const Part = (props) => {
   return (
     <div>
