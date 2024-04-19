@@ -1,6 +1,9 @@
 const express = require("express");
 const app = express();
-const morgan=require("morgan");
+const morgan = require("morgan");
+const cors = require("cors");
+app.use(cors());
+app.use(express.static("build"));
 
 app.use(morgan("tiny"));
 let persons = [
@@ -60,45 +63,46 @@ app.delete("/api/persons/:id", (request, response) => {
   response.status(204).end();
 });
 const generateId = () => {
-    const maxId = persons.length > 0
-      ? Math.max(...persons.map(n => n.id)) //the three points to convert the array in individual numbers 
-      : 0
-    return maxId + 1
-  }
-  
-  app.post("/api/persons", (request, response) => {
-    const body = request.body;
-  
-    // Check if name or number is missing
-    if (!body.name || !body.number) {
-      return response.status(400).json({
-        error: "Name or number is missing",
-      });
-    }
-  
-    // Check if the name already exists in the phonebook
-    const existingPerson = persons.find((person) => person.name === body.name);
-    if (existingPerson) {
-      return response.status(400).json({
-        error: "Name must be unique",
-      });
-    }
-  
-    // Create a new person object with a generated id
-    const newPerson = {
-      id: generateId(),
-      name: body.name,
-      number: body.number,
-    };
-  
-    // Add the new person to the persons array
-    persons = persons.concat(newPerson);
-  
-    // Send the new person object as a response
-    response.json(newPerson);
-  });
+  const maxId =
+    persons.length > 0
+      ? Math.max(...persons.map((n) => n.id)) //the three points to convert the array in individual numbers
+      : 0;
+  return maxId + 1;
+};
 
-const PORT = 3001;
+app.post("/api/persons", (request, response) => {
+  const body = request.body;
+
+  // Check if name or number is missing
+  if (!body.name || !body.number) {
+    return response.status(400).json({
+      error: "Name or number is missing",
+    });
+  }
+
+  // Check if the name already exists in the phonebook
+  const existingPerson = persons.find((person) => person.name === body.name);
+  if (existingPerson) {
+    return response.status(400).json({
+      error: "Name must be unique",
+    });
+  }
+
+  // Create a new person object with a generated id
+  const newPerson = {
+    id: generateId(),
+    name: body.name,
+    number: body.number,
+  };
+
+  // Add the new person to the persons array
+  persons = persons.concat(newPerson);
+
+  // Send the new person object as a response
+  response.json(newPerson);
+});
+
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
