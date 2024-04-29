@@ -24,12 +24,16 @@ const App = () => {
 					number: newNumber,
 				})
 				.then((response) => {
-					setPersons([...persons, response]);
+					setPersons([...persons, response]); // Update the state after successfully creating the new person
 					setNotification({
 						status: "success",
 						msg: `Success: You added ${newName} to the Phonebook!`,
 					});
 					setShowMsg(true);
+					
+					// Reset form fields
+					setNewName("");
+					setNewNumber("");
 				})
 				.catch((err) => {
 					console.log(err);
@@ -39,10 +43,7 @@ const App = () => {
 					});
 					setShowMsg(true);
 				});
-
-			setNewName("");
-			setNewNumber("");
-		} else {
+		}else {
 			if (
 				window.confirm(
 					`${newName} is already added, do you want to replace the old number with a new one?`
