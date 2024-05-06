@@ -72,7 +72,7 @@ app.get("/info", (req,res) => {
 
 
 
-app.get("/api/people" , (req,res) => {
+app.get("/api/persons" , (req,res) => {
     Person
     .find({})
     .then(people => {
@@ -81,7 +81,7 @@ app.get("/api/people" , (req,res) => {
     .catch(error => next(error))
 })
 
-app.get("/api/people/:id",(req,res,next) => {
+app.get("/api/persons/:id",(req,res,next) => {
     console.log(`api/people/${req.params.id}`)
     Person.findById(req.params.id)
     .then(person => {
@@ -98,7 +98,7 @@ app.get("/api/people/:id",(req,res,next) => {
     })*/
 })
 
-app.delete("/api/people/:id",(req,res,next) => {
+app.delete("/api/persons/:id",(req,res,next) => {
     /*const id = Number(req.params.id)
     const person = people.filter(p => p.id === id)
     people = people.filter(p => p.id !== id)
@@ -122,7 +122,7 @@ const generateId = () => {
 
 const postMorgan = morgan(':method :url :status :res[content-length] - :response-time ms :body')
 
-app.post("/api/people",(req,res)=> {
+app.post("/api/persons",(req,res)=> {
     let person = req.body
     console.log("post req.body",person)
     //let id = generateId()
@@ -155,7 +155,7 @@ app.post("/api/people",(req,res)=> {
     }
 })
 
-app.put('/api/people/:id', (req, res, next) => {
+app.put('/api/persons/:id', (req, res, next) => {
     const body = req.body
     const person = {
       name: body.name,
