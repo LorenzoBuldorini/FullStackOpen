@@ -14,7 +14,7 @@ const Person = require("./models/person")
 //the dist folder cointannins the production build of the frontend
 //express fetches the html and the javascript using the static middleware
 //if the HTTP GET request finds the correct file, it then returns it
-app.use(express.static('dist'))
+app.use(express.static('build'))
 
 //define middleware to show requests body
 /*app.use((request,response,next)=> {
@@ -33,7 +33,7 @@ morgan.token("body",(request) => {
 //morgan predefined string format
 app.use(morgan("tiny"))
 
-let people =  [
+let persons =  [
     { 
       "id": 1,
       "name": "Arto Hellas", 
@@ -56,14 +56,12 @@ let people =  [
     }
 ]
 
-app.get("/",(req,res) => {
-    res.send("<h1>Hello World!</h1>")
-})
+
 
 app.get("/info", (req,res) => {
     const date = new Date()
     res.send(
-        `<p>Phonebook has info for ${people.length} people</p>
+        `<p>Phonebook has info for ${persons.length} people</p>
         <br>
         <p>${date}</p>`
     )
@@ -75,14 +73,14 @@ app.get("/info", (req,res) => {
 app.get("/api/persons" , (req,res) => {
     Person
     .find({})
-    .then(people => {
-        return res.json(people)
+    .then(persons => {
+        return res.json(persons)
     })
     .catch(error => next(error))
 })
 
 app.get("/api/persons/:id",(req,res,next) => {
-    console.log(`api/people/${req.params.id}`)
+    console.log(`api/persons/${req.params.id}`)
     Person.findById(req.params.id)
     .then(person => {
     if (person) {
@@ -114,8 +112,8 @@ app.delete("/api/persons/:id",(req,res,next) => {
 })
 
 const generateId = () => {
-    const maxId = people.length > 0
-      ? Math.max(...people.map(n => n.id))
+    const maxId = persons.length > 0
+      ? Math.max(...persons.map(n => n.id))
       : 0
     return maxId + 1
   }
@@ -126,7 +124,7 @@ app.post("/api/persons",(req,res)=> {
     let person = req.body
     console.log("post req.body",person)
     //let id = generateId()
-    const alreadyAdded = people.map(p => p.name)
+    const alreadyAdded = persons.map(p => p.name)
 
     if(!req.body.name || !req.body.number) {
         return response.status(400).json({
